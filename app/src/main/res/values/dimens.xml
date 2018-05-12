@@ -1,0 +1,5 @@
+<resources>
+    <dimen name="padding">16dp</dimen>
+    <dimen name="RecycleView_top_padding">60dp</dimen>
+    <dimen name="padding_2x">32dp</dimen>
+</resources>
