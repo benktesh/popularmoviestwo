@@ -1,3 +1,28 @@
+
+
+
+
+
+
+
+
+
+
+
+
+TODO Lists:
+- Use styles in layout
+
+
+
+
+
+
+
+
+
+
+The following notes from stage 1 are here for reference purpose.
 Notes:
 - Please replace api key in apiData.xml for key "api_key"
 - Screens.gif shows some shots of the app on emulator

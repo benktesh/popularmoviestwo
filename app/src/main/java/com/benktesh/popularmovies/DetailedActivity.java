@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -57,6 +58,13 @@ public class DetailedActivity extends AppCompatActivity {
         mBinding.tvSynopsis.setText(movieItem.getOverview());
         mBinding.tvReleaseDate.setText(movieItem.getReleaseDate());
         mBinding.rbvUserRating.setRating((float) movieItem.getVoteAverage());
+
+
+        mBinding.bvAddToFavorite.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Will add to favorite db", Toast.LENGTH_LONG).show();
+            }
+        });
 
         String posterPathURL = NetworkUtilities.buildPosterUrl(movieItem.getPosterPath());
         try {

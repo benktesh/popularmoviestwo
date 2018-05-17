@@ -65,6 +65,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingBottom="@dimen/padding" />
+
+                    <Button
+                        android:id="@+id/bv_add_to_favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mark_as_favorite"
+                       />
                 </LinearLayout>
             </LinearLayout>
 

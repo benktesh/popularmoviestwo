@@ -36,11 +36,6 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="@dimen/padding" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold" />
-
                 <RatingBar
                     android:id="@+id/rbv_user_rating"
                     style="@style/Widget.AppCompat.RatingBar.Small"
@@ -49,18 +44,26 @@
                     android:numStars="10"
                     android:paddingBottom="@dimen/padding" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/release_date"
-                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tv_release_date"
-                    tools:text="10/10/2010"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/padding" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/release_date"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_release_date"
+                        tools:text="10/10/2010"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/padding" />
+
+                    <Button
+                        android:id="@+id/bv_add_to_favorite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mark_as_favorite"
+                        />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -68,6 +71,7 @@
                     android:paddingTop="@dimen/padding"
                     android:text="@string/synopsis_label"
                     android:textStyle="bold" />
+
 
                 <TextView
                     android:id="@+id/tv_synopsis"
