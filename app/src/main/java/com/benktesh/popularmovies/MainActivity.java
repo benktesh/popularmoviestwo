@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private RecyclerView mMovieItemList;
     private static final String SORT_POPULAR = "popular";
     private static final String SORT_TOP_RATED = "top_rated";
+    private static final String FAVORITE = "Favorite";
     private static String currentSort = SORT_POPULAR;
     private static final String MOVIE_LIST_KEY = "MOVIE_LIST_KEY";
     private static final String CURRENT_SORT_KEY = "CURRENT_SORT_KEY";
@@ -72,6 +73,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
      */
     private void LoadView() {
         if (movieItems == null || movieItems.isEmpty()) {
+            if(currentSort.equals(FAVORITE)) {
+                Toast.makeText(this, "Will bring favorite from db", Toast.LENGTH_LONG);
+                Log.v(TAG, "Have not implemented the database fetch of popular movies");
+               // return;
+            }
             Log.d(TAG, "Getting Data from Network");
             new NetworkQueryTask().execute(NetworkUtilities.buildDataUrl(getText(R.string.api_key).toString(), currentSort));
         } else {
@@ -138,6 +144,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
             LoadView();
             return true;
         }
+        if (id == R.id.action_favorite && !currentSort.equals(FAVORITE)) {
+            ClearMovieItemList();
+            currentSort = FAVORITE;
+            LoadView();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -153,8 +165,11 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         if (currentSort.equals(SORT_TOP_RATED)) {
             menu.findItem(R.id.action_sort_top_rated).setChecked(true);
 
-        } else {
+        } else if (currentSort.equals(SORT_POPULAR)){
             menu.findItem(R.id.action_sort_most_popular).setChecked(true);
+        }
+        else {
+            menu.findItem(R.id.action_favorite).setChecked(true);
         }
         return true;
     }
