@@ -23,9 +23,12 @@ public class NetworkUtilities {
     private static final String TAG = NetworkUtilities.class.getSimpleName();
 
     private final static String BASE_URL = "http://image.tmdb.org/t/p/";
+    private final static String BASE_URL_MOVIE = " http://api.themoviedb.org/3/movie";
 
     //The width of the poster
     private final static String WIDTH = "w185";
+
+    private final static String API_KEY_PARAM = "?api_key=";
 
     /**
      * Builds the URL to fetch poster image.
@@ -53,11 +56,23 @@ public class NetworkUtilities {
         return url;
     }
 
-    public static URL buildDataUrl(String apiKey, String sort) {
-        String finalPath = "http://api.themoviedb.org/3/movie/" + sort + "?api_key=" + apiKey;
+    /*
+    This return data of a movie id. Currently we know video and review are datakeys that we know will use.
+     */
+    public static URL buildMovieDataUrl(String id, String dataKey, String apiKey) {
+        //example rurl http://api.themoviedb.org/3/movie/19404/reviews?api_key=b22b477cd9c23c35e1ebee827d547c38
+        String finalPath = BASE_URL_MOVIE + id + dataKey + API_KEY_PARAM + apiKey;
         Uri builtUri = Uri.parse(finalPath);
         return getUrl(builtUri);
     }
+
+
+    public static URL buildDataUrl(String apiKey, String sort) {
+        String finalPath = "http://api.themoviedb.org/3/movie/" + sort + API_KEY_PARAM + apiKey;
+        Uri builtUri = Uri.parse(finalPath);
+        return getUrl(builtUri);
+    }
+
 
     /**
      * This method returns the entire result from the HTTP response.
