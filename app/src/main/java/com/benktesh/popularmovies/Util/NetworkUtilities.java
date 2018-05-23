@@ -61,7 +61,9 @@ public class NetworkUtilities {
      */
     public static URL buildMovieDataUrl(String id, String dataKey, String apiKey) {
         //example rurl http://api.themoviedb.org/3/movie/19404/reviews?api_key=b22b477cd9c23c35e1ebee827d547c38
-        String finalPath = BASE_URL_MOVIE + id + dataKey + API_KEY_PARAM + apiKey;
+        //http://api.themoviedb.org/3/movie/19404/reviews?api_key=b22b477cd9c23c35e1ebee827d547c38
+        String finalPath = BASE_URL_MOVIE + "/" + id + "/"+ dataKey + API_KEY_PARAM + apiKey;
+
         Uri builtUri = Uri.parse(finalPath);
         return getUrl(builtUri);
     }

@@ -30,7 +30,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     public MovieAdapter(List<MovieItem> movieItemList, ListItemClickListener listener, Context context) {
 
         mMovieItemList = movieItemList;
-
         mOnClickListener = listener;
         mContext = context;
     }

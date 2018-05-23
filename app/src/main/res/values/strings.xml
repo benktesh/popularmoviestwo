@@ -11,4 +11,7 @@
     <string name="Error_MovieData_Not_Found">Movie data is not available.</string>
     <string name="mark_as_favorite">Mark as Favorite</string>
     <string name="Favorite">Favorite</string>
+    <string name="review_label">Reviews</string>
+    <string name="data_key_review">reviews</string>
+    <string name="data_key_video">videos</string>
 </resources>

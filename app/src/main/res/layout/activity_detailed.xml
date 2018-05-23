@@ -88,6 +88,32 @@
                 tools:text="Fifty Shades Freed is test synopsis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_movie_trailers"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:clipToPadding="false"
+                tools:itemCount="10" >
+            </android.support.v7.widget.RecyclerView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/review_label"
+                android:textStyle="bold"
+                android:paddingTop="@dimen/padding"
+                />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_movie_reviews"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:clipToPadding="false"
+               >
+
+            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </ScrollView>
 </layout>

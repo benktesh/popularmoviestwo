@@ -9,14 +9,16 @@ public class MovieItem implements Parcelable {
     private final String posterPath;
     private final String releaseDate;
     private final double voteAverage;
+    private final String id;
 
-    public MovieItem(String originalTitle, String overview,
+    public MovieItem(String id, String originalTitle, String overview,
                      String posterPath, String releaseDate, double voteAverage) {
         this.originalTitle = originalTitle;
         this.overview = overview;
         this.posterPath = posterPath;
         this.releaseDate = releaseDate;
         this.voteAverage = voteAverage;
+        this.id = id;
     }
 
     private MovieItem(Parcel in) {
@@ -25,6 +27,7 @@ public class MovieItem implements Parcelable {
         posterPath = in.readString();
         releaseDate = in.readString();
         voteAverage = in.readDouble();
+        id = in.readString();
     }
 
     @SuppressWarnings("unused")
@@ -60,6 +63,8 @@ public class MovieItem implements Parcelable {
         return voteAverage;
     }
 
+    public String getId(){return id;}
+
     @Override
     public int describeContents() {
         return 0;
@@ -72,6 +77,7 @@ public class MovieItem implements Parcelable {
         dest.writeString(posterPath);
         dest.writeString(releaseDate);
         dest.writeDouble(voteAverage);
+        dest.writeString(id);
     }
 }
 

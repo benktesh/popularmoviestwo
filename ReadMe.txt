@@ -14,7 +14,9 @@ TODO Lists:
 - Use styles in layout
 
 
-
+Sources for Stage 2:
+Passing multipel parameters to async tasks
+https://stackoverflow.com/questions/12069669/how-can-you-pass-multiple-primitive-parameters-to-asynctask
 
 
 

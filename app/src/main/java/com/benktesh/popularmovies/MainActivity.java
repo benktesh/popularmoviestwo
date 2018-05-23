@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
     @Override
     public void OnListItemClick(MovieItem movieItem) {
-        // Toast.makeText(this, " " + clickedItemIndex, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, " " + movieItem.getId(), Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(this, DetailedActivity.class);
         myIntent.putExtra(DetailedActivity.EXTRA_INDEX, 1);
         myIntent.putExtra("movieItem", movieItem);

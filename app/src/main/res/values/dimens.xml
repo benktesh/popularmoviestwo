@@ -2,4 +2,5 @@
     <dimen name="padding">16dp</dimen>
     <dimen name="RecycleView_top_padding">60dp</dimen>
     <dimen name="padding_2x">32dp</dimen>
+    <dimen name="thin_line_height">2dp</dimen>
 </resources>
