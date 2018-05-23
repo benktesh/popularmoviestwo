@@ -1,27 +1,23 @@
 package com.benktesh.popularmovies;
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.benktesh.popularmovies.Model.MovieItem;
 import com.benktesh.popularmovies.Model.MovieReview;
-import com.benktesh.popularmovies.Util.NetworkUtilities;
 import com.example.benktesh.popularmovies.R;
 import com.example.benktesh.popularmovies.databinding.ActivityDetailedBinding;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 /**
- * Created by utia on 5/22/18.
+ * Created by Benktesh on 5/22/18.
  */
 
 public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieReviewHolder> {
