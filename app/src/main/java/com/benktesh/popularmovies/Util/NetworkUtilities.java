@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -23,7 +24,8 @@ public class NetworkUtilities {
     private static final String TAG = NetworkUtilities.class.getSimpleName();
 
     private final static String BASE_URL = "http://image.tmdb.org/t/p/";
-    private final static String BASE_URL_MOVIE = " http://api.themoviedb.org/3/movie";
+    private final static String BASE_URL_MOVIE = "http://api.themoviedb.org/3/movie/";
+    private final static String BASE_URL_TRAILER_IMAGE = "http://img.youtube.com/vi/"; //5581bd68c3a3685df70000c6
 
     //The width of the poster
     private final static String WIDTH = "w185";
@@ -62,15 +64,35 @@ public class NetworkUtilities {
     public static URL buildMovieDataUrl(String id, String dataKey, String apiKey) {
         //example rurl http://api.themoviedb.org/3/movie/19404/reviews?api_key=b22b477cd9c23c35e1ebee827d547c38
         //http://api.themoviedb.org/3/movie/19404/reviews?api_key=b22b477cd9c23c35e1ebee827d547c38
-        String finalPath = BASE_URL_MOVIE + "/" + id + "/"+ dataKey + API_KEY_PARAM + apiKey;
+        String finalPath = BASE_URL_MOVIE + id + "/" + dataKey + API_KEY_PARAM + apiKey;
 
         Uri builtUri = Uri.parse(finalPath);
         return getUrl(builtUri);
     }
 
+    public static String buildYoutubeTrailerImageUrl(String key) {
+        //Example https://img.youtube.com/vi/Y9JvS2TmSvA/1.jpg
+        String finalPath = BASE_URL_TRAILER_IMAGE + key + "/0.jpg"; // + GetRandomPictureId() + ".jpg";
+        return finalPath;
+    }
+
+    /*
+    This function generate a random integer between 0 and 3 (inclusive).
+    Youtube has thumbnail images for pictures. This function generate a random integer between 0 and 3 (inclusive)
+    @return String value of randomely generated number
+    */
+    private static String GetRandomPictureId() {
+        int min = 0;
+        int max = 3;
+
+        Random rand = new Random();
+
+        return Integer.toString(rand.nextInt((max - min) + 1) + min);
+    }
+
 
     public static URL buildDataUrl(String apiKey, String sort) {
-        String finalPath = "http://api.themoviedb.org/3/movie/" + sort + API_KEY_PARAM + apiKey;
+        String finalPath = BASE_URL_MOVIE + sort + API_KEY_PARAM + apiKey;
         Uri builtUri = Uri.parse(finalPath);
         return getUrl(builtUri);
     }
@@ -119,4 +141,5 @@ public class NetworkUtilities {
         NetworkInfo netInfo = cm != null ? cm.getActiveNetworkInfo() : null;
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
+
 }

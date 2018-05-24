@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.benktesh.popularmovies.Model.MovieItem;
 import com.benktesh.popularmovies.Model.MovieReview;
+import com.benktesh.popularmovies.Model.MovieVideo;
 import com.benktesh.popularmovies.Util.JsonUtils;
 import com.benktesh.popularmovies.Util.NetworkUtilities;
 import com.example.benktesh.popularmovies.R;
@@ -21,10 +22,9 @@ import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
-public class DetailedActivity extends AppCompatActivity  {
+public class DetailedActivity extends AppCompatActivity implements MovieVideoAdapter.ListItemClickListener  {
 
     private static final String TAG = DetailedActivity.class.getSimpleName();
     public static final String EXTRA_INDEX = "extra_index";
@@ -32,7 +32,11 @@ public class DetailedActivity extends AppCompatActivity  {
 
     private RecyclerView mMovieReviewList;
     private List<MovieReview> movieReviewItems;
-    private MovieReviewAdapter mAdapter;
+    private MovieReviewAdapter movieReviewAdapter;
+
+    private RecyclerView mMovieVideoList;
+    private List<MovieVideo> movieVideoItems;
+    private MovieVideoAdapter movieVideoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,27 +60,43 @@ public class DetailedActivity extends AppCompatActivity  {
         }
 
         mMovieReviewList = findViewById(R.id.rv_movie_reviews);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-
-        mMovieReviewList.setLayoutManager(layoutManager);
-
-
+        LinearLayoutManager layoutManagerReview = new LinearLayoutManager(this);
+        mMovieReviewList.setLayoutManager(layoutManagerReview);
         mMovieReviewList.setHasFixedSize(false);
-        mAdapter = new MovieReviewAdapter(movieReviewItems, this, mBinding);
-        mMovieReviewList.setAdapter(mAdapter);
-        LoadReviews(movieItem);
+        movieReviewAdapter = new MovieReviewAdapter(movieReviewItems, this, mBinding);
+        mMovieReviewList.setAdapter(movieReviewAdapter);
+
+        mMovieVideoList = findViewById(R.id.rv_movie_trailers);
+        LinearLayoutManager layoutManagerVideo = new LinearLayoutManager(this);
+        mMovieVideoList.setLayoutManager(layoutManagerVideo);
+        mMovieVideoList.setHasFixedSize(false);
+        movieVideoAdapter = new MovieVideoAdapter(movieVideoItems, this, this);
+        mMovieVideoList.setAdapter(movieVideoAdapter);
+
+
+        LoadAdditionalData(movieItem);
         populateUI(movieItem);
     }
 
-    private void LoadReviews(MovieItem movieItem) {
-       Log.d(TAG, "Getting Data from Network");
+    private void LoadAdditionalData(MovieItem movieItem) {
+        Log.v(TAG, "Getting Review from Network");
 
-        NetworkQueryTaskParameters taskParameters = new NetworkQueryTaskParameters(movieItem.getId(),
-                getText(R.string.data_key_review).toString(),
-                getText(R.string.api_key).toString());
-       //call review data async
-       new DetailedActivity.NetworkQueryTask()
-               .execute(taskParameters);
+         new DetailedActivity.NetworkQueryTask()
+                .execute(new NetworkQueryTaskParameters(movieItem.getId(),
+                        getText(R.string.data_key_review).toString(),
+                        getText(R.string.api_key).toString()));
+        Log.v(TAG, "Getting Trailer Video Data from Network");
+        new DetailedActivity.NetworkQueryTask()
+                .execute(new NetworkQueryTaskParameters(movieItem.getId(),
+                        getText(R.string.data_key_video).toString(),
+                        getText(R.string.api_key).toString()));
+
+
+    }
+
+    @Override
+    public void OnListItemClick(MovieVideo movieVideo) {
+        Toast.makeText(this, movieVideo.getKey() + " Clicked", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -113,14 +133,15 @@ public class DetailedActivity extends AppCompatActivity  {
         @Override
         protected void onPostExecute(String searchResults) {
             if (searchResults != null && !searchResults.equals("")) {
+                Log.d(TAG, "Network data retrieved for " + datakey);
                 //we are going to load either review or video based on data_key passed
                 if(datakey.equals(getText(R.string.data_key_review).toString())){
                     movieReviewItems = JsonUtils.parseMovieReviewJson(searchResults);
-                    mAdapter.setMovieReviewData(movieReviewItems);
-                    mAdapter.notifyDataSetChanged();
+                    movieReviewAdapter.setMovieReviewData(movieReviewItems);
                 }
-                else {
-
+                else { //must equal to video
+                    movieVideoItems = JsonUtils.parseMovieVideoJson(searchResults);
+                    movieVideoAdapter.setMovieReviewData(movieVideoItems);
                 }
 
 

@@ -18,6 +18,9 @@ Sources for Stage 2:
 Passing multipel parameters to async tasks
 https://stackoverflow.com/questions/12069669/how-can-you-pass-multiple-primitive-parameters-to-asynctask
 
+Get thumbnail image of youtube
+https://stackoverflow.com/questions/2068344/how-do-i-get-a-youtube-video-thumbnail-from-the-youtube-api
+
 
 
 

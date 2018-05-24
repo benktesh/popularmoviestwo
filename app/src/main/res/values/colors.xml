@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="thin_line_color">#c0c0c0</color>
+    <color name="trailer_separator_line_color">#ffffff</color>
 </resources>
