@@ -2,6 +2,7 @@ package com.benktesh.popularmovies;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -21,10 +22,13 @@ import com.example.benktesh.popularmovies.databinding.ActivityDetailedBinding;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
-public class DetailedActivity extends AppCompatActivity implements MovieVideoAdapter.ListItemClickListener  {
+import static com.benktesh.popularmovies.Util.NetworkUtilities.buildVideoUrl;
+
+public class DetailedActivity extends AppCompatActivity implements MovieVideoAdapter.ListItemClickListener {
 
     private static final String TAG = DetailedActivity.class.getSimpleName();
     public static final String EXTRA_INDEX = "extra_index";
@@ -81,7 +85,7 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
     private void LoadAdditionalData(MovieItem movieItem) {
         Log.v(TAG, "Getting Review from Network");
 
-         new DetailedActivity.NetworkQueryTask()
+        new DetailedActivity.NetworkQueryTask()
                 .execute(new NetworkQueryTaskParameters(movieItem.getId(),
                         getText(R.string.data_key_review).toString(),
                         getText(R.string.api_key).toString()));
@@ -96,8 +100,7 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
 
     @Override
     public void OnListItemClick(MovieVideo movieVideo) {
-        Toast.makeText(this, movieVideo.getKey() + " Clicked", Toast.LENGTH_SHORT).show();
-
+        this.startActivity(new Intent(Intent.ACTION_VIEW, NetworkUtilities.buildVideoUrl(movieVideo.getKey())));
     }
 
     private static class NetworkQueryTaskParameters {
@@ -108,7 +111,7 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
         NetworkQueryTaskParameters(String id, String dataKey, String apiKey) {
             this.id = id;
             this.dataKey = dataKey;
-            searchUrl = NetworkUtilities.buildMovieDataUrl(id, dataKey, apiKey );
+            searchUrl = NetworkUtilities.buildMovieDataUrl(id, dataKey, apiKey);
         }
     }
 
@@ -116,6 +119,7 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
     public class NetworkQueryTask extends AsyncTask<NetworkQueryTaskParameters, Void, String> {
 
         String datakey;
+
         @Override
         protected String doInBackground(NetworkQueryTaskParameters... params) {
             URL searchUrl = params[0].searchUrl;
@@ -135,11 +139,10 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
             if (searchResults != null && !searchResults.equals("")) {
                 Log.d(TAG, "Network data retrieved for " + datakey);
                 //we are going to load either review or video based on data_key passed
-                if(datakey.equals(getText(R.string.data_key_review).toString())){
+                if (datakey.equals(getText(R.string.data_key_review).toString())) {
                     movieReviewItems = JsonUtils.parseMovieReviewJson(searchResults);
                     movieReviewAdapter.setMovieReviewData(movieReviewItems);
-                }
-                else { //must equal to video
+                } else { //must equal to video
                     movieVideoItems = JsonUtils.parseMovieVideoJson(searchResults);
                     movieVideoAdapter.setMovieReviewData(movieVideoItems);
                 }
@@ -163,7 +166,7 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
         mBinding.tvReleaseDate.setText(movieItem.getReleaseDate());
         mBinding.rbvUserRating.setRating((float) movieItem.getVoteAverage());
 
-        mBinding.bvAddToFavorite.setOnClickListener(new View.OnClickListener(){
+        mBinding.bvAddToFavorite.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Will add to favorite db", Toast.LENGTH_LONG).show();
             }

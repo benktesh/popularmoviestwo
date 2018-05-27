@@ -12,6 +12,7 @@
 
 TODO Lists:
 - Use styles in layout
+- Add unit tests
 
 
 Sources for Stage 2:

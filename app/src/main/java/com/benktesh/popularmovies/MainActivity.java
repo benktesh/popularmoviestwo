@@ -2,6 +2,8 @@ package com.benktesh.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -14,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.benktesh.popularmovies.Data.MovieDbHelper;
 import com.benktesh.popularmovies.Model.MovieItem;
 import com.benktesh.popularmovies.Util.JsonUtils;
 import com.example.benktesh.popularmovies.R;
@@ -35,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private ArrayList<MovieItem> movieItems;
     private MovieAdapter mMovieAdapter;
 
+    private SQLiteDatabase mDb;
+
     private static final String TAG = MainActivity.class.getSimpleName();
 
 
@@ -45,6 +50,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        MovieDbHelper movieDbHelper = new MovieDbHelper(this);
+        mDb = movieDbHelper.getWritableDatabase();
 
         //get reference to recyclerview
         mMovieItemList = findViewById(R.id.rv_movies);

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -15,10 +16,10 @@
             <TextView
                 android:id="@+id/tv_original_title"
                 style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                tools:text="Fifty Shades Freed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/padding" />
+                android:paddingBottom="@dimen/padding"
+                tools:text="Fifty Shades Freed" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -27,8 +28,8 @@
 
                 <ImageView
                     android:id="@+id/iv_movie_poster"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="200dp"
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/post_of_the_movie"
                     android:scaleType="centerCrop" />
@@ -61,18 +62,21 @@
 
                     <TextView
                         android:id="@+id/tv_release_date"
-                        tools:text="10/10/2010"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="@dimen/padding" />
+                        android:paddingBottom="@dimen/padding"
+                        tools:text="10/10/2010" />
 
                     <Button
                         android:id="@+id/bv_add_to_favorite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/mark_as_favorite"
-                       />
+                        android:text="@string/mark_as_favorite" />
                 </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             </LinearLayout>
 
             <TextView
@@ -85,43 +89,37 @@
             <TextView
                 android:id="@+id/tv_synopsis"
                 style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                tools:text="Fifty Shades Freed is test synopsis"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                tools:text="Fifty Shades Freed is test synopsis" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/trailers"
-                android:textStyle="bold"
                 android:paddingTop="@dimen/padding"
-                />
+                android:text="@string/trailer_label"
+                android:textStyle="bold" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_movie_trailers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:clipToPadding="false">
-
-            </android.support.v7.widget.RecyclerView>
+                android:clipToPadding="false"></android.support.v7.widget.RecyclerView>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/review_label"
-                android:textStyle="bold"
                 android:paddingTop="@dimen/padding"
-                />
+                android:text="@string/review_label"
+                android:textStyle="bold" />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_movie_reviews"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:clipToPadding="false"
-               >
-            </android.support.v7.widget.RecyclerView>
-
+                android:clipToPadding="false"></android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </ScrollView>
 </layout>

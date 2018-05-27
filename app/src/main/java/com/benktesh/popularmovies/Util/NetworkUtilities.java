@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Random;
 import java.util.Scanner;
@@ -26,6 +27,7 @@ public class NetworkUtilities {
     private final static String BASE_URL = "http://image.tmdb.org/t/p/";
     private final static String BASE_URL_MOVIE = "http://api.themoviedb.org/3/movie/";
     private final static String BASE_URL_TRAILER_IMAGE = "http://img.youtube.com/vi/"; //5581bd68c3a3685df70000c6
+    private final static String BASE_URL_TRAILER_VIDEO = "https://www.youtube.com/watch?v=";
 
     //The width of the poster
     private final static String WIDTH = "w185";
@@ -95,6 +97,11 @@ public class NetworkUtilities {
         String finalPath = BASE_URL_MOVIE + sort + API_KEY_PARAM + apiKey;
         Uri builtUri = Uri.parse(finalPath);
         return getUrl(builtUri);
+    }
+
+    public static Uri buildVideoUrl(String videoKey) {
+        String path = BASE_URL_TRAILER_VIDEO + videoKey;
+        return Uri.parse(path);
     }
 
 
