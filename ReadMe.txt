@@ -22,6 +22,9 @@ https://stackoverflow.com/questions/12069669/how-can-you-pass-multiple-primitive
 Get thumbnail image of youtube
 https://stackoverflow.com/questions/2068344/how-do-i-get-a-youtube-video-thumbnail-from-the-youtube-api
 
+Parcelable for boolean:
+https://stackoverflow.com/questions/6201311/how-to-read-write-a-boolean-when-implementing-the-parcelable-interface
+
 
 
 

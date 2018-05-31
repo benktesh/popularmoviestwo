@@ -1,10 +1,13 @@
 package com.benktesh.popularmovies;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +15,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.benktesh.popularmovies.Data.MovieContract;
+import com.benktesh.popularmovies.Data.MovieDbHelper;
 import com.benktesh.popularmovies.Model.MovieItem;
 import com.benktesh.popularmovies.Model.MovieReview;
 import com.benktesh.popularmovies.Model.MovieVideo;
@@ -41,6 +46,12 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
     private RecyclerView mMovieVideoList;
     private List<MovieVideo> movieVideoItems;
     private MovieVideoAdapter movieVideoAdapter;
+    private boolean isFavorite;
+
+
+    private SQLiteDatabase mDb;
+
+    MovieItem movieItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +68,7 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
             closeOnError(getString(R.string.Error_MovieData_Not_Found));
             return;
         }
-        MovieItem movieItem = data.getParcelable("movieItem");
+        movieItem = data.getParcelable("movieItem");
         if (movieItem == null) {
             closeOnError(getString(R.string.Error_MovieData_Not_Found));
             return;
@@ -77,12 +88,15 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
         movieVideoAdapter = new MovieVideoAdapter(movieVideoItems, this, this);
         mMovieVideoList.setAdapter(movieVideoAdapter);
 
+        MovieDbHelper movieDbHelper = new MovieDbHelper(this);
+        mDb = movieDbHelper.getWritableDatabase();
 
-        LoadAdditionalData(movieItem);
-        populateUI(movieItem);
+
+        LoadAdditionalData();
+        populateUI();
     }
 
-    private void LoadAdditionalData(MovieItem movieItem) {
+    private void LoadAdditionalData() {
         Log.v(TAG, "Getting Review from Network");
 
         new DetailedActivity.NetworkQueryTask()
@@ -159,7 +173,28 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
-    private void populateUI(MovieItem movieItem) {
+    private void addToFavorite() {
+        ContentValues cv = new ContentValues();
+        cv.put(MovieContract.MovieEntry.COLUMN_NAME_ID, movieItem.getId());
+        cv.put(MovieContract.MovieEntry.COLUMN_NAME_ORIGINALTITLE, movieItem.getOriginalTitle());
+        cv.put(MovieContract.MovieEntry.COLUMN_NAME_OVERVIEW, movieItem.getOverview());
+        cv.put(MovieContract.MovieEntry.COLUMN_NAME_POSTERPATH, movieItem.getPosterPath());
+        cv.put(MovieContract.MovieEntry.COLUMN_NAME_RELEASEDATE, movieItem.getReleaseDate());
+        cv.put(MovieContract.MovieEntry.COLUMN_NAME_VOTEAVERAGE, movieItem.getVoteAverage());
+
+        long rowCount = mDb.insert(MovieContract.MovieEntry.TABLE_NAME, null, cv);
+        Log.d(TAG, "Added Row: " + rowCount);
+
+
+    }
+
+    private void removeFromFavorite() {
+       int rowCount =  mDb.delete(MovieContract.MovieEntry.TABLE_NAME,
+                MovieContract.MovieEntry.COLUMN_NAME_ID + "=" + movieItem.getId(), null);
+        Log.d(TAG, "Removed Rows: " + rowCount);
+    }
+
+    private void populateUI() {
 
         mBinding.tvOriginalTitle.setText(movieItem.getOriginalTitle());
         mBinding.tvSynopsis.setText(movieItem.getOverview());
@@ -168,9 +203,21 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
 
         mBinding.bvAddToFavorite.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Will add to favorite db", Toast.LENGTH_LONG).show();
+                if(movieItem.isFavorite()) {
+                    movieItem.setFavorite(false);
+                    removeFromFavorite();
+                }
+                else {
+                    movieItem.setFavorite(true);
+                    mBinding.bvAddToFavorite.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.FavoriteColor, null));
+                    addToFavorite();
+                }
+                SetBackGroundColorOfFavorite();
+
             }
         });
+
+        SetBackGroundColorOfFavorite();
 
         String posterPathURL = NetworkUtilities.buildPosterUrl(movieItem.getPosterPath());
         try {
@@ -185,6 +232,16 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
 
         setTitle(movieItem.getOriginalTitle());
 
+    }
+
+    private void SetBackGroundColorOfFavorite() {
+        if (movieItem.isFavorite()) {
+            mBinding.bvAddToFavorite.setBackgroundColor(ResourcesCompat.getColor(getResources(),
+                    R.color.FavoriteColor, null));
+        } else {
+            mBinding.bvAddToFavorite.setBackgroundColor(ResourcesCompat.getColor(getResources(),
+                    R.color.NotFavoriteColor, null));
+        }
     }
 
 }

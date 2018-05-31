@@ -43,7 +43,7 @@ public class JsonUtils {
                 String release_date = movieJson.optString("release_date",
                         "Not Available");
                 String vote_average = movieJson.optString("vote_average", "Not Available");
-                movie = new MovieItem(id, original_title, overview, poster_path, release_date, Double.parseDouble(vote_average));
+                movie = new MovieItem(id, original_title, overview, poster_path, release_date, Double.parseDouble(vote_average),false);
                 items.add(movie);
 
             }

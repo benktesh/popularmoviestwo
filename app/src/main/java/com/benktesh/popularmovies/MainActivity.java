@@ -2,6 +2,7 @@ package com.benktesh.popularmovies;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.benktesh.popularmovies.Data.MovieContract;
 import com.benktesh.popularmovies.Data.MovieDbHelper;
 import com.benktesh.popularmovies.Model.MovieItem;
 import com.benktesh.popularmovies.Util.JsonUtils;
@@ -25,6 +27,7 @@ import com.benktesh.popularmovies.Util.NetworkUtilities;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener {
 
@@ -81,10 +84,16 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
      */
     private void LoadView() {
         if (movieItems == null || movieItems.isEmpty()) {
-            if(currentSort.equals(FAVORITE)) {
-                Toast.makeText(this, "Will bring favorite from db", Toast.LENGTH_LONG);
-                Log.v(TAG, "Have not implemented the database fetch of popular movies");
-               // return;
+
+            if (currentSort.equals(FAVORITE)) {
+                Toast.makeText(this, "Getting avorite from db", Toast.LENGTH_LONG);
+                Log.d(TAG, "LoadView() - Current Sort is: " + currentSort + " GEtting movie from db");
+
+                //TODO Create another async task to load data from db
+                List<MovieItem> data = getAllFavoriteMovies();
+
+                mMovieAdapter.setMovieData(data);
+                return;
             }
             Log.d(TAG, "Getting Data from Network");
             new NetworkQueryTask().execute(NetworkUtilities.buildDataUrl(getText(R.string.api_key).toString(), currentSort));
@@ -173,10 +182,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         if (currentSort.equals(SORT_TOP_RATED)) {
             menu.findItem(R.id.action_sort_top_rated).setChecked(true);
 
-        } else if (currentSort.equals(SORT_POPULAR)){
+        } else if (currentSort.equals(SORT_POPULAR)) {
             menu.findItem(R.id.action_sort_most_popular).setChecked(true);
-        }
-        else {
+        } else {
             menu.findItem(R.id.action_favorite).setChecked(true);
         }
         return true;
@@ -215,5 +223,44 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         outState.putParcelableArrayList(MOVIE_LIST_KEY, movieItems);
         outState.putString(CURRENT_SORT_KEY, currentSort);
         Log.v(TAG, "Saving the bundle");
+    }
+
+    private List<MovieItem> getAllFavoriteMovies() {
+        Cursor cursor = mDb.query(MovieContract.MovieEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                MovieContract.MovieEntry.COLUMN_TIMESTAMP);
+
+        //TODO Build the movieItem list from the stored Ids
+        List<MovieItem> result = new ArrayList<>();
+
+        Log.d(TAG, "Count of favorite: " + cursor.getCount());
+
+        try {
+            while (cursor.moveToNext()) {
+                String id = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_NAME_ID));
+                Log.d(TAG,id);
+
+                result.add(new MovieItem(
+                        cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_NAME_ID)),
+                        cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_NAME_ORIGINALTITLE)),
+                        cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_NAME_OVERVIEW)),
+                        cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_NAME_POSTERPATH)),
+                        cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_NAME_RELEASEDATE)),
+                        cursor.getDouble(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_NAME_VOTEAVERAGE)),
+                        true
+
+                ));
+            }
+        } finally {
+            cursor.close();
+        }
+
+
+        return result;
+
     }
 }

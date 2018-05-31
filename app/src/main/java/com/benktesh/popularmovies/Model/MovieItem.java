@@ -11,14 +11,26 @@ public class MovieItem implements Parcelable {
     private final double voteAverage;
     private final String id;
 
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    private boolean isFavorite;
+
+
     public MovieItem(String id, String originalTitle, String overview,
-                     String posterPath, String releaseDate, double voteAverage) {
+                     String posterPath, String releaseDate, double voteAverage, boolean isFavorite) {
         this.originalTitle = originalTitle;
         this.overview = overview;
         this.posterPath = posterPath;
         this.releaseDate = releaseDate;
         this.voteAverage = voteAverage;
         this.id = id;
+        this.isFavorite = isFavorite;
     }
 
     private MovieItem(Parcel in) {
@@ -28,6 +40,7 @@ public class MovieItem implements Parcelable {
         releaseDate = in.readString();
         voteAverage = in.readDouble();
         id = in.readString();
+        isFavorite = in.readByte() != 0;
     }
 
     @SuppressWarnings("unused")
@@ -78,6 +91,7 @@ public class MovieItem implements Parcelable {
         dest.writeString(releaseDate);
         dest.writeDouble(voteAverage);
         dest.writeString(id);
+        dest.writeByte((byte) (isFavorite ? 1 : 0));
     }
 }
 
