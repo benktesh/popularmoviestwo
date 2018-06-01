@@ -181,11 +181,8 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
         cv.put(MovieContract.MovieEntry.COLUMN_NAME_POSTERPATH, movieItem.getPosterPath());
         cv.put(MovieContract.MovieEntry.COLUMN_NAME_RELEASEDATE, movieItem.getReleaseDate());
         cv.put(MovieContract.MovieEntry.COLUMN_NAME_VOTEAVERAGE, movieItem.getVoteAverage());
-
-        long rowCount = mDb.insert(MovieContract.MovieEntry.TABLE_NAME, null, cv);
-        Log.d(TAG, "Added Row: " + rowCount);
-
-
+        Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, cv);
+        Log.d(TAG, "Added Row: " + uri);
     }
 
     private void removeFromFavorite() {

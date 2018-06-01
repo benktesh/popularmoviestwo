@@ -8,6 +8,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private SQLiteDatabase mDb;
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    private static final int MOVIE_LOADER_ID = 0;
 
 
     @Override
@@ -87,16 +92,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
 
             if (currentSort.equals(FAVORITE)) {
                 Toast.makeText(this, "Getting avorite from db", Toast.LENGTH_LONG);
-                Log.d(TAG, "LoadView() - Current Sort is: " + currentSort + " GEtting movie from db");
-
-                //TODO Create another async task to load data from db
-                List<MovieItem> data = getAllFavoriteMovies();
-
-                mMovieAdapter.setMovieData(data);
-                return;
+                Log.d(TAG, "LoadView() - Current Sort is: " + currentSort + " Getting movie from db");
+                new DatabaseQueryTask().execute();
+            } else {
+                Log.d(TAG, "Getting Data from Network");
+                new NetworkQueryTask().execute(NetworkUtilities.buildDataUrl(getText(R.string.api_key).toString(), currentSort));
             }
-            Log.d(TAG, "Getting Data from Network");
-            new NetworkQueryTask().execute(NetworkUtilities.buildDataUrl(getText(R.string.api_key).toString(), currentSort));
         } else {
             mMovieAdapter.setMovieData(movieItems);
         }
@@ -131,6 +132,35 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
                 Toast.makeText(getApplicationContext(), R.string.Network_Error_Prompt, Toast.LENGTH_LONG).show();
             }
         }
+
+    }
+
+    public class DatabaseQueryTask extends AsyncTask<Void, Void, List<MovieItem>> {
+
+        @Override
+        protected List<MovieItem> doInBackground(Void... voids) {
+
+            List<MovieItem> searchResults = null;
+            try {
+                searchResults = getAllFavoriteMovies();
+
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            return searchResults;
+        }
+
+        @Override
+        protected void onPostExecute(List<MovieItem> searchResults) {
+            if (searchResults != null) {
+                mMovieAdapter.setMovieData(searchResults);
+
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.DATABASE_ERROR_PROMPT, Toast.LENGTH_LONG).show();
+            }
+        }
+
+
     }
 
     @Override
@@ -173,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private void ClearMovieItemList() {
         if (movieItems != null) {
             movieItems.clear();
+            mMovieAdapter.notifyDataSetChanged();
         }
     }
 
@@ -209,7 +240,19 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         super.onRestoreInstanceState(savedInstanceState);
         movieItems = savedInstanceState.getParcelableArrayList(MOVIE_LIST_KEY);
         currentSort = savedInstanceState.getString(CURRENT_SORT_KEY);
+
         Log.v(TAG, "Restored movies from bundle");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (currentSort.equals(FAVORITE)) {
+            //ClearMovieItemList(); //perhaps movie list has changed. but do this only if favorite was removed from the list
+            //LoadView();
+            Log.v(TAG, "On resume ");
+        }
+
     }
 
     /**
@@ -225,7 +268,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         Log.v(TAG, "Saving the bundle");
     }
 
-    private List<MovieItem> getAllFavoriteMovies() {
+    private ArrayList<MovieItem> getAllFavoriteMovies() {
+
+        Log.v(TAG, "getAllFavoriteMovies()");
         Cursor cursor = mDb.query(MovieContract.MovieEntry.TABLE_NAME,
                 null,
                 null,
@@ -235,14 +280,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
                 MovieContract.MovieEntry.COLUMN_TIMESTAMP);
 
         //TODO Build the movieItem list from the stored Ids
-        List<MovieItem> result = new ArrayList<>();
+        ArrayList<MovieItem> result = new ArrayList<>();
 
         Log.d(TAG, "Count of favorite: " + cursor.getCount());
 
         try {
             while (cursor.moveToNext()) {
                 String id = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_NAME_ID));
-                Log.d(TAG,id);
+                Log.d(TAG, id);
 
                 result.add(new MovieItem(
                         cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_NAME_ID)),

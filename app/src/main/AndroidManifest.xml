@@ -29,6 +29,11 @@
         <activity android:name="com.benktesh.popularmovies.DetailedActivity"
             android:parentActivityName="com.benktesh.popularmovies.MainActivity"
             tools:ignore="UnusedAttribute" />
+        <provider
+            android:authorities="com.benktesh.popularmovies"
+            android:name="com.benktesh.popularmovies.Data.MovieContentProvider"
+            android:exported="false"
+            />
     </application>
 
 </manifest>

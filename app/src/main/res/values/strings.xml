@@ -15,4 +15,5 @@
     <string name="data_key_review">reviews</string>
     <string name="data_key_video">videos</string>
     <string name="trailer_label">Trailers</string>
+    <string name="DATABASE_ERROR_PROMPT">Could not retrieve result from Database</string>
 </resources>
