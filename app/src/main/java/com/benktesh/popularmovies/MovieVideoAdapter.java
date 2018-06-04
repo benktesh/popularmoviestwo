@@ -101,8 +101,6 @@ public class MovieVideoAdapter extends RecyclerView.Adapter<MovieVideoAdapter.Vi
             mOnClickListener.OnListItemClick(mItemList.get(clickedPosition));
             Log.v(TAG, "Review is clicked");
         }
-
-
     }
 
 }

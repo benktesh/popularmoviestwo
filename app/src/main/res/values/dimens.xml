@@ -5,4 +5,5 @@
     <dimen name="thin_line_height">2dp</dimen>
     <dimen name="zero_padding">0dp</dimen>
     <dimen name="padding_1dp">1dp</dimen>
+    <dimen name="button_padding_10dp">10dp</dimen>
 </resources>

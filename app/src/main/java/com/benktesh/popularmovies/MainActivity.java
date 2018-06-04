@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Movie;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -126,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         protected void onPostExecute(String searchResults) {
             if (searchResults != null && !searchResults.equals("")) {
                 movieItems = JsonUtils.parseMovieJson(searchResults);
+                updateFavoriteItems();
+
+
                 mMovieAdapter.setMovieData(movieItems);
 
             } else {
@@ -133,6 +137,28 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
             }
         }
 
+    }
+
+    /*
+    This method checks if movie is also in favorite list and mark the it accordingly.
+    The intended use is that the movie coming from different source/api calls can then be
+    marked as favorite in the detailed view.
+     */
+    private void updateFavoriteItems() {
+        ArrayList<MovieItem> favoriteMovieItems = getAllFavoriteMovies();
+        boolean found = false;
+        for (int j = 0; j < movieItems.size(); j++) {
+            MovieItem item = movieItems.get(j);
+            for (int i = 0; i < favoriteMovieItems.size(); i++) {
+                MovieItem temp = favoriteMovieItems.get(i);
+                if (temp.getId().equals(item.getId())) {
+                    Log.v(TAG, "Checking Favorite Movie. Found: " + item.getOriginalTitle());
+                    item.setFavorite(true);
+                    movieItems.set(j, item);
+                    break;
+                }
+            }
+        }
     }
 
     public class DatabaseQueryTask extends AsyncTask<Void, Void, List<MovieItem>> {
@@ -169,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
+
 
     /**
      * Depending on the item selected, this method sets the current sort and clears the movie item list.
@@ -248,8 +275,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     protected void onResume() {
         super.onResume();
         if (currentSort.equals(FAVORITE)) {
-            //ClearMovieItemList(); //perhaps movie list has changed. but do this only if favorite was removed from the list
-            //LoadView();
+            ClearMovieItemList(); //perhaps movie list has changed. but do this only if favorite was removed from the list
+            LoadView();
             Log.v(TAG, "On resume ");
         }
 
@@ -271,13 +298,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private ArrayList<MovieItem> getAllFavoriteMovies() {
 
         Log.v(TAG, "getAllFavoriteMovies()");
-        Cursor cursor = mDb.query(MovieContract.MovieEntry.TABLE_NAME,
+
+        Cursor cursor = getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
                 null,
                 null,
                 null,
-                null,
-                null,
-                MovieContract.MovieEntry.COLUMN_TIMESTAMP);
+                MovieContract.MovieEntry.COLUMN_NAME_VOTEAVERAGE);
 
         //TODO Build the movieItem list from the stored Ids
         ArrayList<MovieItem> result = new ArrayList<>();
@@ -285,6 +311,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         Log.d(TAG, "Count of favorite: " + cursor.getCount());
 
         try {
+
             while (cursor.moveToNext()) {
                 String id = cursor.getString(cursor.getColumnIndex(MovieContract.MovieEntry.COLUMN_NAME_ID));
                 Log.d(TAG, id);

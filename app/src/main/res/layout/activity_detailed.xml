@@ -71,12 +71,11 @@
                         android:id="@+id/bv_add_to_favorite"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:padding="@dimen/button_padding_10dp"
+                        android:layout_gravity="bottom"
                         android:text="@string/mark_as_favorite" />
                 </LinearLayout>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+
             </LinearLayout>
 
             <TextView
@@ -93,33 +92,48 @@
                 android:layout_height="wrap_content"
                 tools:text="Fifty Shades Freed is test synopsis" />
 
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/trailer_label"
+                    android:paddingTop="@dimen/padding"
+                    android:textStyle="bold" />
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_movie_trailers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start"
+                    android:clipToPadding="true"
+                    ></android.support.v7.widget.RecyclerView>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/padding"
-                android:text="@string/trailer_label"
-                android:textStyle="bold" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_movie_trailers"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:clipToPadding="false"></android.support.v7.widget.RecyclerView>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:paddingTop="@dimen/padding"
                 android:text="@string/review_label"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+               />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_movie_reviews"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:clipToPadding="false"></android.support.v7.widget.RecyclerView>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_movie_reviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:clipToPadding="true"
+                    ></android.support.v7.widget.RecyclerView>
+
+
+
+
+
+
+
+
         </LinearLayout>
     </ScrollView>
 </layout>

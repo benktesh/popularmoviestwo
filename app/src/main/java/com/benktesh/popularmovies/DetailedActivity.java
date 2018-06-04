@@ -108,8 +108,6 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
                 .execute(new NetworkQueryTaskParameters(movieItem.getId(),
                         getText(R.string.data_key_video).toString(),
                         getText(R.string.api_key).toString()));
-
-
     }
 
     @Override
@@ -183,11 +181,14 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
         cv.put(MovieContract.MovieEntry.COLUMN_NAME_VOTEAVERAGE, movieItem.getVoteAverage());
         Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, cv);
         Log.d(TAG, "Added Row: " + uri);
+
     }
 
     private void removeFromFavorite() {
-       int rowCount =  mDb.delete(MovieContract.MovieEntry.TABLE_NAME,
-                MovieContract.MovieEntry.COLUMN_NAME_ID + "=" + movieItem.getId(), null);
+
+        Uri uri = MovieContract.MovieEntry.CONTENT_URI;
+        uri = uri.buildUpon().appendPath(movieItem.getId().toString()).build();
+        int rowCount = getContentResolver().delete(uri, null, null);
         Log.d(TAG, "Removed Rows: " + rowCount);
     }
 
