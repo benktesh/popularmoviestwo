@@ -16,4 +16,5 @@
     <string name="data_key_video">videos</string>
     <string name="trailer_label">Trailers</string>
     <string name="DATABASE_ERROR_PROMPT">Could not retrieve result from Database</string>
+    <string name="trailer_content_description">Youtube video content</string>
 </resources>

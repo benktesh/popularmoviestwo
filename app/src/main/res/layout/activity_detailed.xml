@@ -102,13 +102,12 @@
                     android:textStyle="bold" />
 
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_movie_trailers"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:clipToPadding="true"
-                    ></android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_movie_trailers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:clipToPadding="true" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -119,13 +118,12 @@
                 android:textStyle="bold"
                />
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_movie_reviews"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="start"
-                    android:clipToPadding="true"
-                    ></android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_movie_reviews"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:clipToPadding="true" />
 
 
 

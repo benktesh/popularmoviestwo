@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@SuppressWarnings("SpellCheckingInspection")
 public class JsonUtils {
 
     private static final String TAG = JsonUtils.class.getSimpleName();

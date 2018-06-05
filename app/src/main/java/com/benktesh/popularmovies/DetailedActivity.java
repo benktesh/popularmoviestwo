@@ -27,31 +27,23 @@ import com.example.benktesh.popularmovies.databinding.ActivityDetailedBinding;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URL;
 import java.util.List;
-
-import static com.benktesh.popularmovies.Util.NetworkUtilities.buildVideoUrl;
 
 public class DetailedActivity extends AppCompatActivity implements MovieVideoAdapter.ListItemClickListener {
 
     private static final String TAG = DetailedActivity.class.getSimpleName();
     public static final String EXTRA_INDEX = "extra_index";
-    ActivityDetailedBinding mBinding;
+    private ActivityDetailedBinding mBinding;
 
-    private RecyclerView mMovieReviewList;
     private List<MovieReview> movieReviewItems;
     private MovieReviewAdapter movieReviewAdapter;
 
-    private RecyclerView mMovieVideoList;
     private List<MovieVideo> movieVideoItems;
     private MovieVideoAdapter movieVideoAdapter;
-    private boolean isFavorite;
 
 
-    private SQLiteDatabase mDb;
-
-    MovieItem movieItem;
+    private MovieItem movieItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +66,14 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
             return;
         }
 
-        mMovieReviewList = findViewById(R.id.rv_movie_reviews);
+        RecyclerView mMovieReviewList = findViewById(R.id.rv_movie_reviews);
         LinearLayoutManager layoutManagerReview = new LinearLayoutManager(this);
         mMovieReviewList.setLayoutManager(layoutManagerReview);
         mMovieReviewList.setHasFixedSize(false);
         movieReviewAdapter = new MovieReviewAdapter(movieReviewItems, this, mBinding);
         mMovieReviewList.setAdapter(movieReviewAdapter);
 
-        mMovieVideoList = findViewById(R.id.rv_movie_trailers);
+        RecyclerView mMovieVideoList = findViewById(R.id.rv_movie_trailers);
         LinearLayoutManager layoutManagerVideo = new LinearLayoutManager(this);
         mMovieVideoList.setLayoutManager(layoutManagerVideo);
         mMovieVideoList.setHasFixedSize(false);
@@ -89,9 +81,6 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
         mMovieVideoList.setAdapter(movieVideoAdapter);
 
         MovieDbHelper movieDbHelper = new MovieDbHelper(this);
-        mDb = movieDbHelper.getWritableDatabase();
-
-
         LoadAdditionalData();
         populateUI();
     }
@@ -116,9 +105,9 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
     }
 
     private static class NetworkQueryTaskParameters {
-        String id;
-        String dataKey;
-        URL searchUrl;
+        final String id;
+        final String dataKey;
+        final URL searchUrl;
 
         NetworkQueryTaskParameters(String id, String dataKey, String apiKey) {
             this.id = id;
@@ -128,7 +117,7 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
     }
 
 
-    public class NetworkQueryTask extends AsyncTask<NetworkQueryTaskParameters, Void, String> {
+    class NetworkQueryTask extends AsyncTask<NetworkQueryTaskParameters, Void, String> {
 
         String datakey;
 
@@ -181,13 +170,11 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
         cv.put(MovieContract.MovieEntry.COLUMN_NAME_VOTEAVERAGE, movieItem.getVoteAverage());
         Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, cv);
         Log.d(TAG, "Added Row: " + uri);
-
     }
 
     private void removeFromFavorite() {
-
         Uri uri = MovieContract.MovieEntry.CONTENT_URI;
-        uri = uri.buildUpon().appendPath(movieItem.getId().toString()).build();
+        uri = uri.buildUpon().appendPath(movieItem.getId()).build();
         int rowCount = getContentResolver().delete(uri, null, null);
         Log.d(TAG, "Removed Rows: " + rowCount);
     }
@@ -201,11 +188,10 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
 
         mBinding.bvAddToFavorite.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if(movieItem.isFavorite()) {
+                if (movieItem.isFavorite()) {
                     movieItem.setFavorite(false);
                     removeFromFavorite();
-                }
-                else {
+                } else {
                     movieItem.setFavorite(true);
                     mBinding.bvAddToFavorite.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.FavoriteColor, null));
                     addToFavorite();

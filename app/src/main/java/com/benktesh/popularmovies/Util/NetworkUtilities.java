@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.Random;
 import java.util.Scanner;
@@ -64,7 +63,7 @@ public class NetworkUtilities {
     This return data of a movie id. Currently we know video and review are datakeys that we know will use.
      */
     public static URL buildMovieDataUrl(String id, String dataKey, String apiKey) {
-        //example rurl http://api.themoviedb.org/3/movie/19404/reviews?api_key=b22b477cd9c23c35e1ebee827d547c38
+        //example url http://api.themoviedb.org/3/movie/19404/reviews?api_key=b22b477cd9c23c35e1ebee827d547c38
         //http://api.themoviedb.org/3/movie/19404/reviews?api_key=b22b477cd9c23c35e1ebee827d547c38
         String finalPath = BASE_URL_MOVIE + id + "/" + dataKey + API_KEY_PARAM + apiKey;
 
@@ -74,14 +73,13 @@ public class NetworkUtilities {
 
     public static String buildYoutubeTrailerImageUrl(String key) {
         //Example https://img.youtube.com/vi/Y9JvS2TmSvA/1.jpg
-        String finalPath = BASE_URL_TRAILER_IMAGE + key + "/0.jpg"; // + GetRandomPictureId() + ".jpg";
-        return finalPath;
+        return BASE_URL_TRAILER_IMAGE + key + "/0.jpg";
     }
 
     /*
     This function generate a random integer between 0 and 3 (inclusive).
     Youtube has thumbnail images for pictures. This function generate a random integer between 0 and 3 (inclusive)
-    @return String value of randomely generated number
+    @return String value of randomly generated number
     */
     private static String GetRandomPictureId() {
         int min = 0;

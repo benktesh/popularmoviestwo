@@ -23,7 +23,7 @@ import java.util.List;
 public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.MovieReviewHolder> {
 
     private static final String TAG = MovieReviewAdapter.class.getSimpleName();
-    private List<MovieReview> mItemList; //holds the reivew items
+    private List<MovieReview> mItemList; //holds the review items
     private final Context mContext;
 
     public MovieReviewAdapter(List<MovieReview> movieReviewItemList,
@@ -40,9 +40,8 @@ public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.
     @NonNull
     @Override
     public MovieReviewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = mContext;
         int layoutIdForListItem = R.layout.movie_review_list;
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(layoutIdForListItem, parent, false);
         return new MovieReviewHolder(view);
 
@@ -66,10 +65,10 @@ public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.
 
     class MovieReviewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        TextView authorView;
-        TextView contentView;
+        final TextView authorView;
+        final TextView contentView;
 
-        public MovieReviewHolder(View view) {
+        MovieReviewHolder(View view) {
             super(view);
 
             authorView = view.findViewById(R.id.tv_review_author);
@@ -103,7 +102,7 @@ public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.
         @Override
         public void onClick(View view) {
             int clickedPosition = getAdapterPosition();
-           // mOnClickListener.OnListItemClick(mItemList.get(clickedPosition));
+            // mOnClickListener.OnListItemClick(mItemList.get(clickedPosition));
             Log.v(TAG, "Review is clicked");
         }
 

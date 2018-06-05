@@ -23,7 +23,7 @@ import java.util.List;
 public class MovieVideoAdapter extends RecyclerView.Adapter<MovieVideoAdapter.VideoViewHolder> {
 
     private static final String TAG = MovieVideoAdapter.class.getSimpleName();
-    private List<MovieVideo> mItemList; //holds the reivew items
+    private List<MovieVideo> mItemList; //holds the review items
     private final Context mContext;
     final private ListItemClickListener mOnClickListener;
 
@@ -32,7 +32,7 @@ public class MovieVideoAdapter extends RecyclerView.Adapter<MovieVideoAdapter.Vi
     }
 
     public MovieVideoAdapter(List<MovieVideo> movieReviewItemList,
-                             Context context, ListItemClickListener listener ) {
+                             Context context, ListItemClickListener listener) {
         mItemList = movieReviewItemList;
         mContext = context;
         mOnClickListener = listener;
@@ -43,9 +43,8 @@ public class MovieVideoAdapter extends RecyclerView.Adapter<MovieVideoAdapter.Vi
     @NonNull
     @Override
     public VideoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Context context = mContext;
         int layoutIdForListItem = R.layout.movie_trailer_list;
-        LayoutInflater inflater = LayoutInflater.from(context);
+        LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(layoutIdForListItem, parent, false);
         return new VideoViewHolder(view);
     }
@@ -68,10 +67,10 @@ public class MovieVideoAdapter extends RecyclerView.Adapter<MovieVideoAdapter.Vi
 
     class VideoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView trailerYoutube;
+        final ImageView trailerYoutube;
 
 
-        public VideoViewHolder(View view) {
+        VideoViewHolder(View view) {
             super(view);
             trailerYoutube = view.findViewById(R.id.iv_trailer_youtube);
             view.setOnClickListener(this);

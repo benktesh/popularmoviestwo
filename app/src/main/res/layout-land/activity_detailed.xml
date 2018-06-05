@@ -89,7 +89,8 @@
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingLeft="@dimen/padding"
+                android:paddingStart="@dimen/padding"
+                android:paddingEnd="@dimen/padding"
                 android:layout_marginRight="@dimen/padding"
                 android:columnCount="2"
                 android:rowCount="2"
@@ -106,6 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="@dimen/padding"
+                    android:paddingRight="@dimen/padding"
                     android:text="@string/review_label"
                     android:textStyle="bold" />
 
@@ -115,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/rv_movie_trailers"
                     android:layout_gravity="start"
-                    android:clipToPadding="true"></android.support.v7.widget.RecyclerView>
+                    android:clipToPadding="true" />
 
                 <android.support.v7.widget.RecyclerView
 
@@ -124,7 +126,7 @@
                     android:paddingLeft="@dimen/padding"
                     android:paddingRight="200dp"
                     android:layout_gravity="start"
-                    android:clipToPadding="true" ></android.support.v7.widget.RecyclerView>
+                    android:clipToPadding="true" />
 
 
             </GridLayout>

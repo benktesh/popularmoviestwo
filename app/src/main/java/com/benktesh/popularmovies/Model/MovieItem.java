@@ -76,7 +76,9 @@ public class MovieItem implements Parcelable {
         return voteAverage;
     }
 
-    public String getId(){return id;}
+    public String getId() {
+        return id;
+    }
 
     @Override
     public int describeContents() {

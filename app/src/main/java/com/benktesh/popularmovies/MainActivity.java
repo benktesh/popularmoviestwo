@@ -1,18 +1,9 @@
 package com.benktesh.popularmovies;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Movie;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,11 +14,10 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.benktesh.popularmovies.Data.MovieContract;
-import com.benktesh.popularmovies.Data.MovieDbHelper;
 import com.benktesh.popularmovies.Model.MovieItem;
 import com.benktesh.popularmovies.Util.JsonUtils;
-import com.example.benktesh.popularmovies.R;
 import com.benktesh.popularmovies.Util.NetworkUtilities;
+import com.example.benktesh.popularmovies.R;
 
 import java.io.IOException;
 import java.net.URL;
@@ -36,7 +26,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MovieAdapter.ListItemClickListener {
 
-    private RecyclerView mMovieItemList;
     private static final String SORT_POPULAR = "popular";
     private static final String SORT_TOP_RATED = "top_rated";
     private static final String FAVORITE = "Favorite";
@@ -46,10 +35,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     private ArrayList<MovieItem> movieItems;
     private MovieAdapter mMovieAdapter;
 
-    private SQLiteDatabase mDb;
-
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final int MOVIE_LOADER_ID = 0;
 
 
     @Override
@@ -60,11 +46,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        MovieDbHelper movieDbHelper = new MovieDbHelper(this);
-        mDb = movieDbHelper.getWritableDatabase();
-
-        //get reference to recyclerview
-        mMovieItemList = findViewById(R.id.rv_movies);
+        RecyclerView mMovieItemList = findViewById(R.id.rv_movies);
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         mMovieItemList.setLayoutManager(layoutManager);
         mMovieItemList.setHasFixedSize(true);
@@ -92,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         if (movieItems == null || movieItems.isEmpty()) {
 
             if (currentSort.equals(FAVORITE)) {
-                Toast.makeText(this, "Getting avorite from db", Toast.LENGTH_LONG);
                 Log.d(TAG, "LoadView() - Current Sort is: " + currentSort + " Getting movie from db");
                 new DatabaseQueryTask().execute();
             } else {
@@ -108,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     This is an async task to fetch data from network and new data is applied to adapter.
     Also makes a long toast message when fails to retrieve information from the network
      */
-    public class NetworkQueryTask extends AsyncTask<URL, Void, String> {
+    class NetworkQueryTask extends AsyncTask<URL, Void, String> {
 
         @Override
         protected String doInBackground(URL... params) {
@@ -161,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
         }
     }
 
-    public class DatabaseQueryTask extends AsyncTask<Void, Void, List<MovieItem>> {
+    class DatabaseQueryTask extends AsyncTask<Void, Void, List<MovieItem>> {
 
         @Override
         protected List<MovieItem> doInBackground(Void... voids) {
@@ -237,20 +218,23 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if (currentSort.equals(SORT_TOP_RATED)) {
-            menu.findItem(R.id.action_sort_top_rated).setChecked(true);
+        switch (currentSort) {
+            case SORT_TOP_RATED:
+                menu.findItem(R.id.action_sort_top_rated).setChecked(true);
 
-        } else if (currentSort.equals(SORT_POPULAR)) {
-            menu.findItem(R.id.action_sort_most_popular).setChecked(true);
-        } else {
-            menu.findItem(R.id.action_favorite).setChecked(true);
+                break;
+            case SORT_POPULAR:
+                menu.findItem(R.id.action_sort_most_popular).setChecked(true);
+                break;
+            default:
+                menu.findItem(R.id.action_favorite).setChecked(true);
+                break;
         }
         return true;
     }
 
     @Override
     public void OnListItemClick(MovieItem movieItem) {
-        Toast.makeText(this, " " + movieItem.getId(), Toast.LENGTH_SHORT).show();
         Intent myIntent = new Intent(this, DetailedActivity.class);
         myIntent.putExtra(DetailedActivity.EXTRA_INDEX, 1);
         myIntent.putExtra("movieItem", movieItem);
@@ -305,10 +289,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.List
                 null,
                 MovieContract.MovieEntry.COLUMN_NAME_VOTEAVERAGE);
 
-        //TODO Build the movieItem list from the stored Ids
         ArrayList<MovieItem> result = new ArrayList<>();
-
-        Log.d(TAG, "Count of favorite: " + cursor.getCount());
 
         try {
 
