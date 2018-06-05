@@ -1,18 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
-
-TODO Lists:
-- Use styles in layout
-- Add unit tests
+Notes for Stage 2:
+- Please replace api key in apiData.xml for key "api_key"
+- Screens2.gif shows some shots of the app on emulator
 
 
 Sources for Stage 2:
@@ -26,10 +14,7 @@ Parcelable for boolean:
 https://stackoverflow.com/questions/6201311/how-to-read-write-a-boolean-when-implementing-the-parcelable-interface
 
 
-
-
-
-
+---------------- END Stage 2 Notes --------------
 
 The following notes from stage 1 are here for reference purpose.
 Notes:
