@@ -222,9 +222,12 @@ public class DetailedActivity extends AppCompatActivity implements MovieVideoAda
         if (movieItem.isFavorite()) {
             mBinding.bvAddToFavorite.setBackgroundColor(ResourcesCompat.getColor(getResources(),
                     R.color.FavoriteColor, null));
+            mBinding.bvAddToFavorite.setText(R.string.remove_from_favorite);
+
         } else {
             mBinding.bvAddToFavorite.setBackgroundColor(ResourcesCompat.getColor(getResources(),
                     R.color.NotFavoriteColor, null));
+            mBinding.bvAddToFavorite.setText(R.string.mark_as_favorite);
         }
     }
 
